@@ -1,33 +1,86 @@
 # terraform-muti-env
 ## 目录结构
 terraform-muti-env/
+├── terragrunt.hcl                         # 顶层通用配置（remote_state等）
 ├── common/
-│   ├── modules/
-│   │   ├── network/
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   └── outputs.tf
-│   │   └── s3/
-│   │       ├── main.tf
-│   │       ├── variables.tf
-│   │       └── outputs.tf
-│   ├── variables.tf
-│   └── outputs.tf
+│   └── modules/
+│       ├── network/
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── s3/
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       └── ecs/
+│           ├── main.tf
+│           ├── variables.tf
+│           └── outputs.tf
 ├── prod/
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── eu-west-1.tfvars
-│   └── eu-west-2.tfvars
+│   ├── terragrunt.hcl                     # 定义环境级变量(env=prod)
+│   ├── eu-west-1/
+│   │   ├── network/
+│   │   │   └── terragrunt.hcl
+│   │   ├── s3/
+│   │   │   └── terragrunt.hcl
+│   │   └── ecs/
+│   │       └── terragrunt.hcl
+│   └── eu-west-2/
+│       ├── network/
+│       │   └── terragrunt.hcl
+│       ├── s3/
+│       │   └── terragrunt.hcl
+│       └── ecs/
+│           └── terragrunt.hcl
 └── dev/
-├── main.tf
-├── variables.tf
-├── eu-west-1.tfvars
-└── eu-west-2.tfvars
+├── terragrunt.hcl
+├── eu-west-1/
+│   ├── network/
+│   │   └── terragrunt.hcl
+│   ├── s3/
+│   │   └── terragrunt.hcl
+│   └── ecs/
+│       └── terragrunt.hcl
+└── eu-west-2/
+├── network/
+│   └── terragrunt.hcl
+├── s3/
+│   └── terragrunt.hcl
+└── ecs/
+└── terragrunt.hcl
+
 
 
 ## 使用方式
+### 单个 region 单个模块（例如 prod 环境的 eu-west-1 网络）
 ```shell
-terraform init
-terraform plan -var-file="eu-west-1.tfvars"
-terraform apply -var-file="eu-west-1.tfvars"
+cd terraform-muti-env/prod/eu-west-1/network
+terragrunt init
+terragrunt plan
+terragrunt apply
+
+```
+
+
+### 整个 region 下的所有模块（network + s3 + ecs）
+```shell
+cd terraform-muti-env/prod/eu-west-1
+terragrunt run-all plan
+terragrunt run-all apply
+```
+
+
+### 同环境下多个 region 一起执行
+```shell
+cd terraform-muti-env/prod
+terragrunt run-all plan
+terragrunt run-all apply
+```
+
+
+### 全部环境一起执行
+```shell
+cd terraform-muti-env
+terragrunt run-all plan
+terragrunt run-all apply
 ```
