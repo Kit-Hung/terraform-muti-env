@@ -58,9 +58,29 @@ cd terraform-muti-env/prod/eu-west-1/network
 terragrunt init
 terragrunt plan
 terragrunt apply
-
 ```
 
+
+### 单环境（prod）自动并行多 region 部署
+执行顺序：
+所有 eu-west-* 下的 network 模块同时运行；
+完成后，同时运行所有 s3；
+完成后，同时运行所有 ecs。
+
+
+```shell
+cd terraform-muti-env/prod
+terragrunt run-all apply --terragrunt-parallelism 4
+```
+
+
+#### 单环境（prod）自动并行多 region 部署, 同时查看日志（可选）
+输出包含被依赖模块的日志
+
+```shell
+cd terraform-muti-env/prod
+terragrunt run-all apply --terragrunt-parallelism 4 --terragrunt-include-external-dependencies
+```
 
 ### 整个 region 下的所有模块（network + s3 + ecs）
 ```shell
@@ -83,4 +103,11 @@ terragrunt run-all apply
 cd terraform-muti-env
 terragrunt run-all plan
 terragrunt run-all apply
+```
+
+
+### 模块间依赖的可视化
+```shell
+cd terraform-muti-env
+terragrunt graph-dependencies | dot -Tpng > graph.png
 ```

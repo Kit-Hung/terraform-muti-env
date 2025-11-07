@@ -19,3 +19,11 @@ provider "aws" {
 }
 EOF
 }
+
+# 通用执行参数，可选
+terraform {
+  extra_arguments "default_parallelism" {
+    commands = ["apply", "plan"]
+    arguments = ["-parallelism=10"]
+  }
+}
