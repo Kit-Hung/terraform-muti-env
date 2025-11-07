@@ -1,5 +1,7 @@
 # terraform-muti-env
 ## 目录结构
+
+```text
 terraform-muti-env/
 ├── terragrunt.hcl                         # 顶层通用配置（remote_state等）
 ├── common/
@@ -33,23 +35,22 @@ terraform-muti-env/
 │       └── ecs/
 │           └── terragrunt.hcl
 └── dev/
-├── terragrunt.hcl
-├── eu-west-1/
-│   ├── network/
-│   │   └── terragrunt.hcl
-│   ├── s3/
-│   │   └── terragrunt.hcl
-│   └── ecs/
-│       └── terragrunt.hcl
-└── eu-west-2/
-├── network/
-│   └── terragrunt.hcl
-├── s3/
-│   └── terragrunt.hcl
-└── ecs/
-└── terragrunt.hcl
-
-
+    ├── terragrunt.hcl
+    ├── eu-west-1/
+    │   ├── network/
+    │   │   └── terragrunt.hcl
+    │   ├── s3/
+    │   │   └── terragrunt.hcl
+    │   └── ecs/
+    │       └── terragrunt.hcl
+    └── eu-west-2/
+        ├── network/
+        │   └── terragrunt.hcl
+        ├── s3/
+        │   └── terragrunt.hcl
+        └── ecs/
+            └── terragrunt.hcl
+```
 
 ## 使用方式
 ### 单个 region 单个模块（例如 prod 环境的 eu-west-1 网络）
